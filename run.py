@@ -13,7 +13,8 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    print(f'Bot logged in as {client.user}')
+    print(f'{client.user} is on {len(client.guilds)} server(s)')
 
 @client.event
 async def on_thread_create(thread):
@@ -38,7 +39,7 @@ async def on_raw_reaction_add(reaction):
     '''
     Pins message if thread owner reacts to it with :pushpin:
     '''
-    if reaction.emoji.name != "📌":
+    if reaction.emoji.name != '📌':
         return
 
     thread = await client.fetch_channel(reaction.channel_id)
@@ -57,7 +58,7 @@ async def on_raw_reaction_remove(reaction):
     '''
     Unpins message if thread owner removes :pushpin: reaction
     '''
-    if reaction.emoji.name != "📌":
+    if reaction.emoji.name != '📌':
         return
 
     thread = await client.fetch_channel(reaction.channel_id)
@@ -70,5 +71,15 @@ async def on_raw_reaction_remove(reaction):
     
     message = await thread.fetch_message(reaction.message_id)
     await message.unpin()
+
+@client.event
+async def on_guild_join(guild):
+    print(f'{client.user} joined {guild.name}')
+    print(f'{client.user} is now on {len(client.guilds)} server(s)')
+
+@client.event
+async def on_guild_remove(guild):
+    print(f'{client.user} left {guild.name}')
+    print(f'{client.user} is now on {len(client.guilds)} server(s)')
 
 client.run(BOT_TOKEN)
